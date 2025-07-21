@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>Echoes of Valtara</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Three.js via CDN for memory efficiency -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r158/three.min.js"></script>
+    <script src="https://unpkg.com/three@0.158.0/examples/js/loaders/GLTFLoader.js"></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        font-family: 'Inter', sans-serif;
+        background: #1a1a2e;
+      }
+      
+      /* Loading screen styles */
+      .loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #1a1a2e, #16213e);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        color: white;
+      }
+      
+      .loading-title {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: #64ffda;
+        text-shadow: 0 0 20px rgba(100, 255, 218, 0.5);
+      }
+      
+      .loading-subtitle {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+        color: #94a3b8;
+      }
+      
+      .loading-bar {
+        width: 300px;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 2px;
+        overflow: hidden;
+        margin-bottom: 1rem;
+      }
+      
+      .loading-progress {
+        height: 100%;
+        background: linear-gradient(90deg, #64ffda, #00bfa5);
+        width: 0%;
+        transition: width 0.3s ease;
+        box-shadow: 0 0 10px rgba(100, 255, 218, 0.5);
+      }
+      
+      .loading-text {
+        color: #94a3b8;
+        font-size: 0.9rem;
+      }
+      
+      /* Game canvas styles */
+      canvas {
+        display: block;
+        outline: none;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen">
+      <div class="loading-title">Echoes of Valtara</div>
+      <div class="loading-subtitle">A 3D Isometric RPG Adventure</div>
+      <div class="loading-bar">
+        <div class="loading-progress" id="loading-progress"></div>
+      </div>
+      <div class="loading-text" id="loading-text">Loading game world...</div>
+    </div>
+
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    
+    <script>
+      // Simple loading progress simulation
+      let progress = 0;
+      const progressBar = document.getElementById('loading-progress');
+      const loadingText = document.getElementById('loading-text');
+      const loadingScreen = document.getElementById('loading-screen');
+      
+      const loadingMessages = [
+        'Loading game world...',
+        'Generating terrain...',
+        'Preparing pantheon attunements...',
+        'Initializing multiplayer systems...',
+        'Almost ready...'
+      ];
+      
+      function updateProgress() {
+        progress += Math.random() * 20;
+        if (progress >= 100) {
+          progress = 100;
+          progressBar.style.width = '100%';
+          loadingText.textContent = 'Ready! Entering Valtara...';
+          
+          setTimeout(() => {
+            loadingScreen.style.opacity = '0';
+            setTimeout(() => {
+              loadingScreen.style.display = 'none';
+            }, 500);
+          }, 1000);
+          return;
+        }
+        
+        progressBar.style.width = progress + '%';
+        loadingText.textContent = loadingMessages[Math.floor(progress / 20)];
+        setTimeout(updateProgress, 300 + Math.random() * 500);
+      }
+      
+      // Start loading after a brief delay
+      setTimeout(updateProgress, 500);
+    </script>
+  </body>
+</html>
